@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <meta charset="ISO-8859-1">
+    <title>Employee Pannel</title>
+</head>
+<body>
+<div align="center" >
+
+    <br>
+    <div><h1>Employee Panel</h1></div>
+    <br>
+
+    <div >
+        Hello <b><span >Username</span></b> &nbsp;
+        <i><span >Roles</span></i>
+    </div>
+    <br>
+
+    <div >
+        <a href="/new"  class="btn btn-primary" role="button">New Employee</a>
+    </div>
+    <br>
+
+    <div>
+        <table class="table table-striped" th:width="20px">
+            <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Town</th>
+                <th >Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${listEmployees}">
+                <th th:text="${employee.id}">Employee ID</th>
+                <td th:text="${employee.firstName}">First Name</td>
+                <td th:text="${employee.lastName}">Last Name</td>
+                <td th:text="${employee.email}">Email</td>
+                <td th:text="${employee.phone}">Phone</td>
+                <td th:text="${employee.town}">Town</td>
+                <td >
+                    <div >
+                        <a class="btn btn-outline-primary" th:href="@{'/edit/' + ${employee.id}}">Edit</a>
+                    </div> &nbsp;&nbsp;&nbsp;
+                    <div >
+                        <a class="btn btn-outline-danger" th:href="@{'/delete/' + ${employee.id}}">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <form th:href="@{/login}" method="get" action="/logout">
+            <button type="submit" class="btn btn-danger">Log Out</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
