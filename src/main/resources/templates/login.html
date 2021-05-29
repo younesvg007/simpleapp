@@ -17,7 +17,7 @@
 </head>
 <body>
 <div class="container">
-    <form class="form-signin" th:action="@{/login}" th:object="${loginForm}" method="post">
+    <form action="#" th:action="@{/login}" th:object="${loginForm}" method="post" class="form-signin">
         <h2 class="form-signin-heading">Please login to Management App</h2>
         <p th:if="${invalidCredentials}" class="error"> Username or Password incorrect !</p>
         <p>
@@ -30,7 +30,7 @@
             <input type="password" id="password" name="password" class="form-control" placeholder="Password"
                    required="">
         </p>
-        <button class="btn btn-lg btn-primary btn-block" href="/home" type="submit">Login</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
     </form>
 </div>
 </body>

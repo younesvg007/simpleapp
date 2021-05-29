@@ -16,7 +16,10 @@ public class User implements Serializable {
     private String password;
     private boolean enabled;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_functions", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "function_id"))
+    @JoinTable(
+            name = "users_functions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "function_id"))
     private Set<Function> functions = new HashSet<>();
 
     public User(Long id, String username, String password, boolean enabled) {

@@ -1,23 +1,22 @@
 package com.example.simpleapp.controller;
 
-import com.example.simpleapp.domain.Employee;
+import com.example.simpleapp.domain.Function;
 import com.example.simpleapp.domain.User;
 import com.example.simpleapp.service.EmployeeService;
 import com.example.simpleapp.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping(value = "account")
 public class EmployeeController {
+
     private final EmployeeService employeeService;
     private final UserService userService;
 
@@ -26,66 +25,42 @@ public class EmployeeController {
         this.userService = userService;
     }
 
-    //To get login page
-    @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String getLoginPage() {
-        //return html page name
-        return "login";
+    @RequestMapping(method = RequestMethod.GET)
+    public String index() {
+        return "account/index";
     }
 
-    //checking for login credentials
-    @RequestMapping(value="/login", method = RequestMethod.POST)
-    public String login(@ModelAttribute(name="loginForm") User user, Model model) {
-        String username = user.getUsername();
-        String password = user.getPassword();
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public String login(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            HttpSession session,
+            HttpServletResponse response,
+            ModelMap modelMap) {
 
+        String role = "";
         User userByUsername = userService.getUserByUsername(username);
-        if (userByUsername == null){
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "User not Found");
+        if (userByUsername != null && userByUsername.getPassword().equals(password)) {
+
+            for (Function f : userByUsername.getFunctions()) {
+                if (Long.valueOf(f.getId()).equals(userByUsername.getId())) {
+                    role = f.getName();
+                }
+            }
+
+            session.setAttribute("username", role);
+            //response.addCookie(new Cookie(userByUsername.getUsername(), );
+            return "account/welcome";
+        } else {
+            modelMap.put("error", "Invalid Account");
+            return "account/index";
         }
-
-        if (userByUsername.getPassword().equals(password)){
-
-            return "redirect:/home";
-        }
-
-        model.addAttribute("invalidCredentials", true);
-        return "redirect:/login";
     }
 
-    @RequestMapping(value="/home", method = RequestMethod.GET)
-    public String viewHomePage(Model model) {
-        List<Employee> employees = employeeService.findAllEmployees();
-        model.addAttribute("listEmployees", employees);
-        return "/home";
-    }
-
-    @RequestMapping("/new")
-    public String newEmployeePage(Model model) {
-        Employee employee = new Employee();
-        model.addAttribute(employee);
-        return "redirect:/add";
-    }
-
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
-        employeeService.saveEmployee(employee);
-        return "redirect:/home";
-    }
-
-    @RequestMapping("edit/{id}")
-    public ModelAndView showEditEmployeePage(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("edit");
-        Employee employee = employeeService.findEmployeeById(id);
-        modelAndView.addObject("employee", employee);
-        return modelAndView;
-    }
-
-    @RequestMapping("delete/{id}")
-    public String deleteEmployeePage(@PathVariable("id") Long id) {
-        employeeService.deleteEmployee(id);
-        return "redirect:/home";
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public String logout(HttpSession session) {
+        session.removeAttribute("username");
+        return "redirect:../account";
     }
 
 }
