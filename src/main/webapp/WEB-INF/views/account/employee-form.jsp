@@ -8,30 +8,27 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <meta charset="ISO-8859-1">
-    <title>Adding Employee</title>
+    <title>Employee Form</title>
 </head>
 <body>
 <div align="center">
     <br/>
     <h1>Employee Form</h1>
-    <br/>
+    <br/><br><br />
     <div class="panel-body">
         <form:form action="saveEmployee" cssClass="form-horizontal"
                    method="post" modelAttribute="employee">
 
-            <!-- need to associate this data with customer id -->
             <form:hidden path="id" />
 
             <div class="form-group">
-                <label for="firstName" class="col-md-3 control-label">First
-                    Name</label>
+                <label for="firstName" class="col-md-3 control-label">First Name</label>
                 <div class="col-md-9">
                     <form:input path="firstName" cssClass="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="lastName" class="col-md-3 control-label">Last
-                    Name</label>
+                <label for="lastName" class="col-md-3 control-label">Last Name</label>
                 <div class="col-md-9">
                     <form:input path="lastName" cssClass="form-control" />
                 </div>

@@ -44,7 +44,7 @@ public class EmployeeController {
             HttpServletResponse response,
             ModelMap modelMap) {
 
-        String userRole =  "";
+        String userRole = "";
         User userByUsername = userService.getUserByUsername(username);
         if (userByUsername != null && userByUsername.getPassword().equals(password)) {
 
@@ -73,16 +73,23 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "showForm", method = RequestMethod.GET)
-    public String showFormForAddEmployee(HttpSession session, Model model) {
+    public String showFormForAddEmployee(HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = new Employee();
-        //if (session.getAttribute("userfunction").toString())
+        if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("CREATOR")){
+            modelMap.put("error", "Only ADMIN and CREATOR can handle this action !");
+            return "not-allowed";
+        }
         model.addAttribute("employee", employee);
         return "employee-form";
     }
 
     @RequestMapping(value = "updateForm", method = RequestMethod.GET)
-    public String showFormForUpdateEmployee(@RequestParam("id") Long id, Model model) {
+    public String showFormForUpdateEmployee(@RequestParam("id") Long id, HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = employeeService.findEmployeeById(id);
+        if (!session.getAttribute("userfunction").toString().equals("ADMIN")|| !session.getAttribute("userfunction").toString().equals("EDITOR")){
+            modelMap.put("error", "Only ADMIN and EDITOR can handle this action !");
+            return "not-allowed";
+        }
         model.addAttribute("employee", employee);
         return "employee-form";
     }
@@ -94,8 +101,12 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
-    public String deleteEmployee(@RequestParam("id") Long id)  {
+    public String deleteEmployee(@RequestParam("id") Long id, HttpSession session, ModelMap modelMap) {
         employeeService.deleteEmployee(id);
+        if (!session.getAttribute("userfunction").toString().equals("ADMIN")){
+            modelMap.put("error", "Only ADMIN can handle this action !");
+            return "not-allowed";
+        }
         return "redirect:/account/welcome";
     }
 
