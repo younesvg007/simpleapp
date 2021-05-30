@@ -15,7 +15,7 @@ public class User implements Serializable {
     private boolean enabled;
     @ManyToOne()
     @JoinColumn(name = "function_id")
-    private Function function = new Function();
+    private Function function;
 
     public User(Long id, String username, String password, boolean enabled) {
         this.id = id;
