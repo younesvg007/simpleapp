@@ -8,7 +8,7 @@
 <body>
 <div align="center" >
     <h3>NOT ALLOWED</h3>
-    ${error }
+    ${msgError }
 </div>
 </body>
 </html>

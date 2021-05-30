@@ -8,7 +8,7 @@
 <body>
 <div align="center" >
     <h3>Login Page</h3>
-    ${error }
+    ${msgError }
     <form method="post"
           action="${pageContext.request.contextPath }/account/login">
         <table border="0" cellpadding="2" cellspacing="2">

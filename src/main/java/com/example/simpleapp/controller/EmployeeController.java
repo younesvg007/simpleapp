@@ -60,7 +60,7 @@ public class EmployeeController {
 
             return "account/welcome";
         } else {
-            modelMap.put("error", "Invalid Account");
+            modelMap.put("msgError", "Invalid Account");
             return "account/index";
         }
     }
@@ -76,7 +76,7 @@ public class EmployeeController {
     public String showFormForAddEmployee(HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = new Employee();
         if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("CREATOR")){
-            modelMap.put("error", "Only ADMIN and CREATOR can handle this action !");
+            modelMap.put("msgError", "Only ADMIN and CREATOR can handle this action !");
             return "not-allowed";
         }
         model.addAttribute("employee", employee);
@@ -87,7 +87,7 @@ public class EmployeeController {
     public String showFormForUpdateEmployee(@RequestParam("id") Long id, HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = employeeService.findEmployeeById(id);
         if (!session.getAttribute("userfunction").toString().equals("ADMIN")|| !session.getAttribute("userfunction").toString().equals("EDITOR")){
-            modelMap.put("error", "Only ADMIN and EDITOR can handle this action !");
+            modelMap.put("msgError", "Only ADMIN and EDITOR can handle this action !");
             return "not-allowed";
         }
         model.addAttribute("employee", employee);
@@ -104,7 +104,7 @@ public class EmployeeController {
     public String deleteEmployee(@RequestParam("id") Long id, HttpSession session, ModelMap modelMap) {
         employeeService.deleteEmployee(id);
         if (!session.getAttribute("userfunction").toString().equals("ADMIN")){
-            modelMap.put("error", "Only ADMIN can handle this action !");
+            modelMap.put("msgError", "Only ADMIN can handle this action !");
             return "not-allowed";
         }
         return "redirect:/account/welcome";

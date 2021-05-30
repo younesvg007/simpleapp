@@ -15,50 +15,49 @@
     <br/>
     <h1>Employee Form</h1>
     <br/><br><br />
-    <div class="panel-body">
-        <form:form action="saveEmployee" cssClass="form-horizontal"
+    <div>
+        <form:form action="saveEmployee"
                    method="post" modelAttribute="employee">
 
             <form:hidden path="id" />
 
             <div class="form-group">
-                <label for="firstName" class="col-md-3 control-label">First Name</label>
-                <div class="col-md-9">
-                    <form:input path="firstName" cssClass="form-control" />
+                <label for="firstName" >First Name</label>
+                <div >
+                    <form:input path="firstName" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="lastName" class="col-md-3 control-label">Last Name</label>
-                <div class="col-md-9">
-                    <form:input path="lastName" cssClass="form-control" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email" class="col-md-3 control-label">Email</label>
-                <div class="col-md-9">
-                    <form:input path="email" cssClass="form-control" />
+                <label for="lastName">Last Name</label>
+                <div >
+                    <form:input path="lastName" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="phone" class="col-md-3 control-label">Phone</label>
-                <div class="col-md-9">
-                    <form:input path="phone" cssClass="form-control" />
+                <label for="email" >Email</label>
+                <div >
+                    <form:input path="email" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="town" class="col-md-3 control-label">Town</label>
-                <div class="col-md-9">
-                    <form:input path="town" cssClass="form-control" />
+                <label for="phone" >Phone</label>
+                <div >
+                    <form:input path="phone" />
                 </div>
             </div>
 
             <div class="form-group">
+                <label for="town" >Town</label>
+                <div >
+                    <form:input path="town"/>
+                </div>
+            </div>
 
-                <div class="col-md-offset-3 col-md-9">
-                    <form:button cssClass="btn btn-primary">Submit</form:button>
+            <div class="form-group">
+                <div >
+                    <form:button >Submit</form:button>
                 </div>
             </div>
 
