@@ -2,8 +2,6 @@ package com.example.simpleapp.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -15,12 +13,9 @@ public class User implements Serializable {
     private String username;
     private String password;
     private boolean enabled;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_functions",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "function_id"))
-    private Set<Function> functions = new HashSet<>();
+    @ManyToOne()
+    @JoinColumn(name = "function_id")
+    private Function function = new Function();
 
     public User(Long id, String username, String password, boolean enabled) {
         this.id = id;
@@ -69,12 +64,12 @@ public class User implements Serializable {
         return this;
     }
 
-    public Set<Function> getFunctions() {
-        return functions;
+    public Function getFunction() {
+        return function;
     }
 
-    public User setFunctions(Set<Function> functions) {
-        this.functions = functions;
+    public User setFunction(Function function) {
+        this.function = function;
         return this;
     }
 }

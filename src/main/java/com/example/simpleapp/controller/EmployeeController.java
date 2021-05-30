@@ -1,7 +1,6 @@
 package com.example.simpleapp.controller;
 
 import com.example.simpleapp.domain.Employee;
-import com.example.simpleapp.domain.Function;
 import com.example.simpleapp.domain.User;
 import com.example.simpleapp.service.EmployeeService;
 import com.example.simpleapp.service.UserService;
@@ -48,11 +47,7 @@ public class EmployeeController {
         User userByUsername = userService.getUserByUsername(username);
         if (userByUsername != null && userByUsername.getPassword().equals(password)) {
 
-            for (Function f : userByUsername.getFunctions()) {
-                if (Long.valueOf(f.getId()).equals(userByUsername.getId())) {
-                    userRole = f.getName();
-                }
-            }
+            userRole = userByUsername.getFunction().getName();
 
             session.setAttribute("userfunction", userRole);
             Cookie cookie = new Cookie(userByUsername.getUsername(), userByUsername.getPassword());
@@ -75,7 +70,7 @@ public class EmployeeController {
     @RequestMapping(value = "showForm", method = RequestMethod.GET)
     public String showFormForAddEmployee(HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = new Employee();
-        if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("CREATOR")){
+        if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("CREATOR")) {
             modelMap.put("msgError", "Only ADMIN and CREATOR can handle this action !");
             return "not-allowed";
         }
@@ -86,7 +81,7 @@ public class EmployeeController {
     @RequestMapping(value = "updateForm", method = RequestMethod.GET)
     public String showFormForUpdateEmployee(@RequestParam("id") Long id, HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = employeeService.findEmployeeById(id);
-        if (!session.getAttribute("userfunction").toString().equals("ADMIN")|| !session.getAttribute("userfunction").toString().equals("EDITOR")){
+        if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("EDITOR")) {
             modelMap.put("msgError", "Only ADMIN and EDITOR can handle this action !");
             return "not-allowed";
         }
@@ -103,7 +98,7 @@ public class EmployeeController {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public String deleteEmployee(@RequestParam("id") Long id, HttpSession session, ModelMap modelMap) {
         employeeService.deleteEmployee(id);
-        if (!session.getAttribute("userfunction").toString().equals("ADMIN")){
+        if (!session.getAttribute("userfunction").toString().equals("ADMIN")) {
             modelMap.put("msgError", "Only ADMIN can handle this action !");
             return "not-allowed";
         }
