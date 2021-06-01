@@ -43,14 +43,16 @@ public class EmployeeController {
             HttpServletResponse response,
             ModelMap modelMap) {
 
-        String userRole = "";
+        String userRole;
         User userByUsername = userService.getUserByUsername(username);
+
+        // Proccessus Authentification d'un utilisateur
         if (userByUsername != null && userByUsername.getPassword().equals(password)) {
 
             userRole = userByUsername.getFunction().getName();
 
-            session.setAttribute("userfunction", userRole);
-            Cookie cookie = new Cookie(userByUsername.getUsername(), userByUsername.getPassword());
+            session.setAttribute("userfunction", userRole); // declaration de la session pour l'utilisateur
+            Cookie cookie = new Cookie(userByUsername.getUsername(), userByUsername.getPassword()); //Creation du cookies
             response.addCookie(cookie);
 
             return "account/welcome";
@@ -70,6 +72,8 @@ public class EmployeeController {
     @RequestMapping(value = "showForm", method = RequestMethod.GET)
     public String showFormForAddEmployee(HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = new Employee();
+
+        //Controle des droits/privilèges selon la fonction de l'utilisateur.
         if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("CREATOR")) {
             modelMap.put("msgError", "Only ADMIN and CREATOR can handle this action !");
             return "not-allowed";
@@ -81,6 +85,8 @@ public class EmployeeController {
     @RequestMapping(value = "updateForm", method = RequestMethod.GET)
     public String showFormForUpdateEmployee(@RequestParam("id") Long id, HttpSession session, Model model, ModelMap modelMap) {
         Employee employee = employeeService.findEmployeeById(id);
+
+        //Controle des droits/privilèges selon la fonction de l'utilisateur.
         if (!session.getAttribute("userfunction").toString().equals("ADMIN") || !session.getAttribute("userfunction").toString().equals("EDITOR")) {
             modelMap.put("msgError", "Only ADMIN and EDITOR can handle this action !");
             return "not-allowed";
@@ -98,6 +104,8 @@ public class EmployeeController {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public String deleteEmployee(@RequestParam("id") Long id, HttpSession session, ModelMap modelMap) {
         employeeService.deleteEmployee(id);
+
+        //Controle des droits/privilèges selon la fonction de l'utilisateur.
         if (!session.getAttribute("userfunction").toString().equals("ADMIN")) {
             modelMap.put("msgError", "Only ADMIN can handle this action !");
             return "not-allowed";
@@ -107,6 +115,8 @@ public class EmployeeController {
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+
+        //destruction du cookie et de la session
         Cookie[] cookies = request.getCookies();
         for (Cookie c : cookies) {
             c.setMaxAge(0);
